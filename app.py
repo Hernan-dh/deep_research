@@ -6,32 +6,23 @@ from styles import CSS, JS, EXAMPLES, HEADER_HTML
 load_dotenv(override=True)
 
 
-async def run(query: str):
+async def run(query: str, _history):
     async for status_update in ResearchManager().run(query):
         yield status_update
 
 
 with gr.Blocks(title="Deep Research") as ui:
     gr.HTML(HEADER_HTML)
-
-    with gr.Row(elem_classes="dr-query-row"):
-        query_textbox = gr.Textbox(
-            placeholder="Type a research question...",
-            show_label=False,
-            container=False,
-            autofocus=True,
-            elem_id="dr-query",
-            scale=5,
-        )
-        run_button = gr.Button("Investigate", variant="primary", elem_id="dr-run", scale=1)
-
-    gr.HTML('<div class="dr-examples-label">Try one</div>')
-    gr.Examples(examples=EXAMPLES, inputs=query_textbox, elem_id="dr-examples")
-
-    report = gr.Markdown(elem_id="dr-report")
-
-    run_button.click(run, inputs=query_textbox, outputs=report)
-    query_textbox.submit(run, inputs=query_textbox, outputs=report)
+    gr.ChatInterface(
+        fn=run,
+        examples=EXAMPLES,
+        chatbot=gr.Chatbot(elem_id="dr-chat", height=600),
+        textbox=gr.Textbox(
+            placeholder="Ask a research question...",
+            submit_btn="Investigate",
+        ),
+        flagging_mode="never",
+    )
 
 
 if __name__ == "__main__":

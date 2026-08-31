@@ -2,7 +2,6 @@ from agents import Runner, trace, gen_trace_id
 from search_agent import search_agent
 from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
-from email_agent import email_agent
 import asyncio
 
 class ResearchManager:
@@ -17,9 +16,6 @@ class ResearchManager:
             search_results = await self.perform_searches(search_plan)
             yield "Searches complete, writing report..."
             report = await self.write_report(query, search_results)
-            yield "Report written, sending email..."
-            await self.send_email(report)
-            yield "Email sent, research complete"
             yield report.markdown_report
 
     async def plan_searches(self, query: str) -> WebSearchPlan:
@@ -43,6 +39,3 @@ class ResearchManager:
         input_message = f"Original query: {query}\nSummarized search results: {search_results}"
         result = await Runner.run(writer_agent, input_message)
         return result.final_output
-    
-    async def send_email(self, report: ReportData) -> None:
-        await Runner.run(email_agent, report.markdown_report)

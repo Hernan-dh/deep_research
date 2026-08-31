@@ -14,8 +14,6 @@
 | Group | Variables |
 |---|---|
 | Research agents | `OPENAI_API_KEY`, `DEFAULT_MODEL_NAME`, `HOW_MANY_SEARCHES` |
-| Email | `USE_EMAIL`, `EMAIL_ADDRESS`, `EMAIL_SMTP_SERVER`, `EMAIL_APP_PASSWORD` |
-| Optional Pushover | `PUSHOVER_USER`, `PUSHOVER_TOKEN` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
 The complete list and non-private examples live in `.env.example`.
@@ -58,5 +56,4 @@ The command displays the proposal and requires typing `PUBLISH` before staging, 
 
 - If startup fails, confirm the environment variables and installed dependencies without printing secrets.
 - If research fails, verify the configured model, API quota, and web-search availability.
-- If SMTP fails, verify the server, account, STARTTLS support, and app password.
 - If publication metadata generation fails, review each reported provider attempt or supply `--title` and `--description` explicitly.
