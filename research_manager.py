@@ -9,15 +9,20 @@ import asyncio
 
 class ResearchManager:
 
-    async def run(self, query: str):
+    async def run(self, query: str, language: str = "English"):
         """ Run the deep research process, yielding the status updates and the final report"""
-        yield "Starting research..."
+        spanish = language == "Español"
+        yield "Iniciando investigación..." if spanish else "Starting research..."
         search_plan = await self.plan_searches(query)
-        yield f"Searches planned, starting {len(search_plan.searches)} searches..."
+        yield (
+            f"Plan listo, iniciando {len(search_plan.searches)} búsquedas..."
+            if spanish else
+            f"Searches planned, starting {len(search_plan.searches)} searches..."
+        )
         search_results = await self.perform_searches(search_plan)
-        yield "Searches complete, writing report..."
-        report = await self.write_report(query, search_results)
-        yield self.render_report(report, search_results)
+        yield "Búsquedas completas, redactando informe..." if spanish else "Searches complete, writing report..."
+        report = await self.write_report(query, search_results, language)
+        yield self.render_report(report, search_results, language)
 
     async def plan_searches(self, query: str) -> WebSearchPlan:
         """ Plan the searches to perform for the query """
@@ -50,9 +55,9 @@ class ResearchManager:
             ensure_ascii=False,
         )
 
-    async def write_report(self, query: str, search_results: list[str]) -> str:
+    async def write_report(self, query: str, search_results: list[str], language: str) -> str:
         """ Write the report for the query """
-        input_message = f"Original query: {query}\nCollected web results: {search_results}"
+        input_message = f"Write the report in {language}.\nOriginal query: {query}\nCollected web results: {search_results}"
         return await run_with_fallback(writer_agent, input_message)
 
     @staticmethod
@@ -76,10 +81,11 @@ class ResearchManager:
         raise RuntimeError(f"Only {len(selected)} unique sources were available; {count} are required.")
 
     @classmethod
-    def render_report(cls, report: str, search_results: list[str]) -> str:
+    def render_report(cls, report: str, search_results: list[str], language: str = "English") -> str:
         """Append exactly five source links selected from real search results."""
         links = []
         for source in cls.select_sources(search_results):
             title = source.get("title", "Source").replace("[", "").replace("]", "").strip()
             links.append(f"- [{title}](<{source['url']}>)")
-        return f"{report.rstrip()}\n\n## Sources\n\n" + "\n".join(links)
+        heading = "Fuentes" if language == "Español" else "Sources"
+        return f"{report.rstrip()}\n\n## {heading}\n\n" + "\n".join(links)

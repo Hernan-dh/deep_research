@@ -19,7 +19,7 @@ ResearchManager
   `-- Writer Agent
 ```
 
-- `app.py`: Gradio chat interface, three randomly selected starter questions, and streaming status updates.
+- `app.py`: Gradio chat interface with a browser-aware English/Spanish selector, localized examples and subtitle, and localized streaming status updates.
 - `config.py`: version-controlled Gemini/Groq models, provider endpoints, and search-count settings.
 - `model_provider.py`: executes agents through Gemini 3.7, Gemini 3.6, and Groq GPT-OSS 120B in quality order.
 - `research_manager.py`: orchestration, tracing, concurrency, and handoff between stages.

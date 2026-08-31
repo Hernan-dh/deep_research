@@ -25,6 +25,12 @@ The Gemini models, Groq fallback, provider endpoints, model timeout, search coun
 
 Normal requests use Gemini 3.7 Flash. Recoverable provider or model-output failures try Gemini 3.6 Flash and then Groq GPT-OSS 120B. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Both provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
 
+## Render deployment
+
+The repository includes `render.yaml` for a free Render web service. It installs `requirements.txt`, starts with `python app.py`, and prompts for the four secret provider variables during Blueprint creation. The application binds to `0.0.0.0` and Render's `PORT`; locally it defaults to port 7860.
+
+After deployment, test one research request in each language and confirm that the final report includes five working source links. Free services may suspend while inactive, so the first request after inactivity can be slower.
+
 ## Verification
 
 ```bash

@@ -12,6 +12,20 @@ EXAMPLES = [
     "Which cities are leading the transition to renewable energy?",
 ]
 
+SPANISH_EXAMPLES = [
+    "Frameworks de agentes de IA más populares en 2026",
+    "Implementaciones comerciales de IA agéntica más exitosas en 2026",
+    "¿Cómo usan las empresas agentes de IA en atención al cliente en 2026?",
+    "¿Qué agentes de programación ofrecen más valor para equipos pequeños?",
+    "¿Cuáles son los principales riesgos de seguridad de los agentes autónomos?",
+    "Compará OpenAI Agents SDK, LangGraph, CrewAI y Google ADK",
+    "¿Qué industrias están adoptando IA agéntica más rápidamente en 2026?",
+    "¿Cuáles son las diferencias prácticas entre MCP y las API tradicionales?",
+    "¿Qué frameworks open source de agentes de IA tienen las comunidades más sólidas?",
+    "¿Qué evidencia existe de que la semana laboral de cuatro días mejora la productividad?",
+    "¿Qué ciudades lideran la transición hacia la energía renovable?",
+]
+
 HEADER_HTML = """
 <div class="dr-brand">
     <div class="dr-mark">
@@ -21,7 +35,7 @@ HEADER_HTML = """
     </div>
     <div class="dr-titles">
         <h1>Deep<span class="dr-sep">/</span>Research</h1>
-        <p>Multi-search web investigation</p>
+        <p id="dr-subtitle">Multi-search web investigation</p>
     </div>
 </div>
 """
