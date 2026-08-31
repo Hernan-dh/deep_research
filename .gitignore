@@ -1,0 +1,16 @@
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local tooling and OS files
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
