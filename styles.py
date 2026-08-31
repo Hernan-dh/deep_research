@@ -43,6 +43,11 @@ HEADER_HTML = """
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap');
 
+:root {
+    --dr-mono: 'DM Mono', monospace;
+    --dr-sans: 'Manrope', sans-serif;
+}
+
 .gradio-container {
     --dr-bg: #fafaf7;
     --dr-surface: #ffffff;
@@ -61,7 +66,7 @@ CSS = """
     padding: 2.5rem 2rem 4rem !important;
     background: var(--dr-bg) !important;
     color: var(--dr-text) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+    font-family: var(--dr-sans) !important;
 }
 
 .gradio-container *,
@@ -116,11 +121,12 @@ body { background: var(--dr-bg, #fafaf7); }
 .dr-bar-3 { background: var(--dr-purple); width: 45%;  }
 
 .dr-titles h1 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 900;
-    letter-spacing: -0.045em;
-    margin: 0;
-    line-height: 0.95;
+    margin: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+    font-size: clamp(1.8rem, 4vw, 2.6rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: -.045em !important;
+    line-height: .95 !important;
     text-transform: uppercase;
     color: var(--dr-text);
 }
@@ -132,8 +138,7 @@ body { background: var(--dr-bg, #fafaf7); }
 }
 
 .dr-titles p {
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-    font-size: 0.7rem;
+    font: 400 .7rem var(--dr-mono) !important;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     margin: 0.55rem 0 0;
@@ -205,7 +210,7 @@ body { background: var(--dr-bg, #fafaf7); }
 
 /* === EXAMPLES === */
 .dr-examples-label {
-    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-family: var(--dr-mono);
     font-size: 0.65rem;
     letter-spacing: 0.28em;
     color: var(--dr-muted);
@@ -399,7 +404,7 @@ body { background: var(--dr-bg, #fafaf7); }
     max-width: 920px !important;
     padding: 34px 24px 48px !important;
     background: transparent !important;
-    font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    font-family: var(--dr-sans) !important;
 }
 
 html, body, gradio-app { background: var(--dr-bg) !important; color-scheme: dark; }
@@ -421,8 +426,8 @@ body {
 #header-copy { gap: 0 !important; }
 #language-control { width: 170px !important; min-width: 170px !important; max-width: 170px !important; flex: 0 0 170px !important; gap: 5px !important; margin-left: auto !important; }
 #language-label, #language-selector { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-#language-label p { margin: 0 !important; color: var(--dr-muted) !important; font: 400 9px ui-monospace, monospace !important; letter-spacing: .08em; text-transform: uppercase; }
-#language-selector input { height: 34px !important; min-height: 34px !important; padding: 5px 9px !important; font: 400 11px ui-monospace, monospace !important; }
+#language-label p { margin: 0 !important; color: var(--dr-muted) !important; font: 400 9px var(--dr-mono) !important; letter-spacing: .08em; text-transform: uppercase; }
+#language-selector input { height: 34px !important; min-height: 34px !important; padding: 5px 9px !important; font: 400 11px var(--dr-mono) !important; }
 #language-selector button { width: 34px !important; height: 34px !important; min-height: 34px !important; padding: 0 !important; }
 
 .block, .form { background: transparent !important; box-shadow: none !important; }
@@ -439,7 +444,7 @@ body {
 }
 
 #dr-chat-en *, #dr-chat-es * {
-    font-family: "Manrope", sans-serif !important;
+    font-family: var(--dr-sans) !important;
 }
 
 #dr-chat-en > .block-label,
