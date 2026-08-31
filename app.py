@@ -1,9 +1,13 @@
+import random
+
 import gradio as gr
 from dotenv import load_dotenv
 from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML
 
 load_dotenv(override=True)
+
+SUGGESTED_EXAMPLES = random.sample(EXAMPLES, k=3)
 
 
 async def run(query: str, _history):
@@ -15,7 +19,7 @@ with gr.Blocks(title="Deep Research") as ui:
     gr.HTML(HEADER_HTML)
     gr.ChatInterface(
         fn=run,
-        examples=EXAMPLES,
+        examples=SUGGESTED_EXAMPLES,
         chatbot=gr.Chatbot(elem_id="dr-chat", height=600),
         textbox=gr.Textbox(
             placeholder="Ask a research question...",

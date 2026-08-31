@@ -1,7 +1,15 @@
 EXAMPLES = [
     "Most popular AI Agent frameworks in 2026",
     "Most commercially successful Agentic AI implementations in 2026",
-    "Celebrities who don't like cheese",
+    "How are companies using AI agents in customer support in 2026?",
+    "Which AI coding agents offer the best value for small development teams?",
+    "What are the main security risks of autonomous AI agents?",
+    "Compare OpenAI Agents SDK, LangGraph, CrewAI, and Google ADK",
+    "What industries are adopting agentic AI most rapidly in 2026?",
+    "What are the practical differences between MCP and traditional APIs?",
+    "Which open-source AI agent frameworks have the strongest communities?",
+    "What evidence exists that four-day workweeks improve productivity?",
+    "Which cities are leading the transition to renewable energy?",
 ]
 
 HEADER_HTML = """

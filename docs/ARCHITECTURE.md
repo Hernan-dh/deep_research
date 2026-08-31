@@ -19,7 +19,7 @@ ResearchManager
   `-- Writer Agent
 ```
 
-- `app.py`: Gradio chat interface and streaming status updates.
+- `app.py`: Gradio chat interface, three randomly selected starter questions, and streaming status updates.
 - `config.py`: version-controlled model and search-count settings shared by the agents.
 - `research_manager.py`: orchestration, tracing, concurrency, and handoff between stages.
 - `planner_agent.py`: produces a structured search plan.
