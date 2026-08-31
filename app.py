@@ -46,18 +46,26 @@ async def run_spanish(query: str, history):
 
 
 with gr.Blocks(title="Deep Research") as ui:
-    header = gr.HTML(HEADER_HTML)
-    language = gr.Dropdown(
-        choices=["English", "Español"],
-        value="English",
-        label="Language / Idioma",
-        elem_id="dr-language",
-    )
+    with gr.Row(elem_id="title-row"):
+        with gr.Column(scale=1, min_width=0, elem_id="header-copy"):
+            header = gr.HTML(HEADER_HTML)
+        with gr.Column(scale=0, min_width=180, elem_id="language-control"):
+            gr.Markdown("Language / Idioma:", elem_id="language-label")
+            language = gr.Dropdown(
+                choices=["English", "Español"],
+                value="English",
+                show_label=False,
+                container=False,
+                interactive=True,
+                scale=0,
+                min_width=180,
+                elem_id="language-selector",
+            )
     with gr.Group(visible=True) as english_chat:
         gr.ChatInterface(
             fn=run_english,
             examples=[item[0] for item in suggested_examples("English")],
-            chatbot=gr.Chatbot(elem_id="dr-chat-en", height=600),
+            chatbot=gr.Chatbot(elem_id="dr-chat-en", height=470),
             textbox=gr.Textbox(
                 placeholder="Ask a research question...",
                 submit_btn="Investigate",
@@ -68,7 +76,7 @@ with gr.Blocks(title="Deep Research") as ui:
         gr.ChatInterface(
             fn=run_spanish,
             examples=[item[0] for item in suggested_examples("Español")],
-            chatbot=gr.Chatbot(elem_id="dr-chat-es", height=600),
+            chatbot=gr.Chatbot(elem_id="dr-chat-es", height=470),
             textbox=gr.Textbox(
                 placeholder="Hacé una pregunta de investigación...",
                 submit_btn="Investigar",

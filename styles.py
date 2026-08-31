@@ -41,6 +41,8 @@ HEADER_HTML = """
 """
 
 CSS = """
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap');
+
 .gradio-container {
     --dr-bg: #fafaf7;
     --dr-surface: #ffffff;
@@ -372,10 +374,77 @@ body { background: var(--dr-bg, #fafaf7); }
     color: var(--dr-blue);
 }
 
+/* === AGENTIC TWIN VISUAL SYSTEM === */
+.gradio-container {
+    --dr-bg: #111412;
+    --dr-surface: #181c19;
+    --dr-line: #343a35;
+    --dr-line-soft: #343a35;
+    --dr-text: #e9e9e3;
+    --dr-muted: #909690;
+    --dr-acid: #c7ff37;
+    --dr-orange: #ff6947;
+    max-width: 920px !important;
+    padding: 34px 24px 48px !important;
+    background: transparent !important;
+    font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+html, body, gradio-app { background: var(--dr-bg) !important; color-scheme: dark; }
+body {
+    background-image: linear-gradient(rgb(255 255 255 / 2.5%) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 2.5%) 1px, transparent 1px) !important;
+    background-size: 42px 42px !important;
+}
+
+#title-row {
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 28px !important;
+    margin-bottom: 22px !important;
+    padding-bottom: 1.25rem !important;
+    border-bottom: 3px solid var(--dr-text) !important;
+}
+
+.dr-brand { margin: 0; padding: 0; border: 0; }
+#header-copy { gap: 0 !important; }
+#language-control { width: 170px !important; min-width: 170px !important; max-width: 170px !important; flex: 0 0 170px !important; gap: 5px !important; margin-left: auto !important; }
+#language-label, #language-selector { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+#language-label p { margin: 0 !important; color: var(--dr-muted) !important; font: 400 9px ui-monospace, monospace !important; letter-spacing: .08em; text-transform: uppercase; }
+#language-selector input { height: 34px !important; min-height: 34px !important; padding: 5px 9px !important; font: 400 11px ui-monospace, monospace !important; }
+#language-selector button { width: 34px !important; height: 34px !important; min-height: 34px !important; padding: 0 !important; }
+
+.block, .form { background: transparent !important; box-shadow: none !important; }
+.chatbot, .chatbot *, .block, .form, button, input, textarea { border-radius: 0 !important; }
+.chatbot > .block-label, .chatbot > label, .chatbot .label-wrap, .chatbot .block-label, .chatbot > .label-container { display: none !important; }
+
+.chatbot, .chatbot.block {
+    height: 470px !important;
+    min-height: 470px !important;
+    border: 1px solid var(--dr-line) !important;
+    background: rgb(24 28 25 / 94%) !important;
+    box-shadow: 18px 18px 0 rgb(0 0 0 / 18%) !important;
+}
+
+.message-row, .message-row > div, .message-row .role, .message-wrap, .bubble-wrap { border: 0 !important; background: transparent !important; box-shadow: none !important; }
+.message-row .message, .message-row .message-bubble, .message-row .bubble { padding: 10px 13px !important; border: 0 !important; box-shadow: none !important; font-size: 14px !important; line-height: 1.6 !important; }
+.message-row.user-row .message, .message-row.user-row .message-bubble, .message-row.user-row .bubble, .message-row[data-role='user'] .message, .message-row[data-role='user'] .message-bubble { background: var(--dr-acid) !important; color: var(--dr-bg) !important; }
+.message-row.bot-row .message, .message-row.bot-row .message-bubble, .message-row.bot-row .bubble, .message-row[data-role='assistant'] .message, .message-row[data-role='assistant'] .message-bubble, .message-row[data-role='assistant'] .bubble { border-left: 2px solid var(--dr-orange) !important; background: #202522 !important; color: var(--dr-text) !important; }
+.message-row .message a, .message-row .message-bubble a { color: var(--dr-acid) !important; text-decoration: underline; text-underline-offset: 3px; }
+
+textarea, input[type='text'] { min-height: 50px !important; padding: 13px 14px !important; border: 1px solid var(--dr-line) !important; background: var(--dr-surface) !important; color: var(--dr-text) !important; font-size: 14px !important; }
+textarea:focus, input[type='text']:focus { border-color: var(--dr-acid) !important; outline: none !important; box-shadow: 0 0 0 1px var(--dr-acid) !important; }
+
+button { min-height: 50px !important; border: 1px solid var(--dr-line) !important; background: var(--dr-surface) !important; color: var(--dr-text) !important; border-radius: 0 !important; }
+button:hover { border-color: var(--dr-acid) !important; color: var(--dr-acid) !important; }
+button.primary, button[variant='primary'], button.submit, button.submit-button, .submit-button, button.lg.primary { border-color: var(--dr-acid) !important; background: var(--dr-acid) !important; color: var(--dr-bg) !important; }
+.icon-button, .chatbot .icon-button { min-height: 0 !important; padding: 4px !important; border: 0 !important; background: transparent !important; color: var(--dr-muted) !important; }
+
 footer { display: none !important; }
 
 @media (max-width: 700px) {
     .gradio-container { padding: 1.5rem 1rem 3rem !important; }
+    #title-row { align-items: flex-start !important; flex-direction: column !important; gap: 16px !important; }
+    #language-control { width: 100% !important; max-width: 170px !important; margin-left: 0 !important; }
     .dr-query-row { flex-direction: column !important; }
     #dr-run {
         border-left: 2px solid var(--dr-line) !important;
