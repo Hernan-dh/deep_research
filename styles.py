@@ -384,6 +384,18 @@ body { background: var(--dr-bg, #fafaf7); }
     --dr-muted: #909690;
     --dr-acid: #c7ff37;
     --dr-orange: #ff6947;
+    --font: "Manrope", sans-serif;
+    --font-mono: "DM Mono", monospace;
+    --body-background-fill: #111412;
+    --background-fill-primary: #181c19;
+    --background-fill-secondary: #202522;
+    --block-background-fill: #181c19;
+    --block-border-color: #343a35;
+    --input-background-fill: #181c19;
+    --button-secondary-background-fill: #181c19;
+    --button-secondary-text-color: #e9e9e3;
+    --body-text-color: #e9e9e3;
+    --block-label-background-fill: #181c19;
     max-width: 920px !important;
     padding: 34px 24px 48px !important;
     background: transparent !important;
@@ -417,12 +429,55 @@ body {
 .chatbot, .chatbot *, .block, .form, button, input, textarea { border-radius: 0 !important; }
 .chatbot > .block-label, .chatbot > label, .chatbot .label-wrap, .chatbot .block-label, .chatbot > .label-container { display: none !important; }
 
-.chatbot, .chatbot.block {
+#dr-chat-en, #dr-chat-es,
+#dr-chat-en.chatbot, #dr-chat-es.chatbot {
     height: 470px !important;
     min-height: 470px !important;
     border: 1px solid var(--dr-line) !important;
     background: rgb(24 28 25 / 94%) !important;
     box-shadow: 18px 18px 0 rgb(0 0 0 / 18%) !important;
+}
+
+#dr-chat-en *, #dr-chat-es * {
+    font-family: "Manrope", sans-serif !important;
+}
+
+#dr-chat-en > .block-label,
+#dr-chat-en > label,
+#dr-chat-en .label-wrap,
+#dr-chat-en .block-label,
+#dr-chat-es > .block-label,
+#dr-chat-es > label,
+#dr-chat-es .label-wrap,
+#dr-chat-es .block-label {
+    display: none !important;
+}
+
+#dr-chat-en,
+#dr-chat-en > div,
+#dr-chat-en [class*="container"],
+#dr-chat-es,
+#dr-chat-es > div,
+#dr-chat-es [class*="container"] {
+    background-color: #181c19 !important;
+    color: #e9e9e3 !important;
+}
+
+#dr-chat-en button,
+#dr-chat-es button {
+    background-color: #202522 !important;
+    border-color: #343a35 !important;
+    color: #e9e9e3 !important;
+}
+
+#dr-chat-en .message,
+#dr-chat-en .message-bubble,
+#dr-chat-en .bubble,
+#dr-chat-es .message,
+#dr-chat-es .message-bubble,
+#dr-chat-es .bubble {
+    background-color: #202522 !important;
+    color: #e9e9e3 !important;
 }
 
 .message-row, .message-row > div, .message-row .role, .message-wrap, .bubble-wrap { border: 0 !important; background: transparent !important; box-shadow: none !important; }
