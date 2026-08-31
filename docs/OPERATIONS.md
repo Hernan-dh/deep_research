@@ -13,10 +13,12 @@
 
 | Group | Variables |
 |---|---|
-| Research agents | `OPENAI_API_KEY`, `DEFAULT_MODEL_NAME`, `HOW_MANY_SEARCHES` |
+| Research agents | `OPENAI_API_KEY` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
 The complete list and non-private examples live in `.env.example`.
+
+The research model and number of searches are versioned in `config.py`. Change `MODEL_NAME` or `HOW_MANY_SEARCHES` there so the selected behavior is reviewed and committed with the code.
 
 ## Verification
 

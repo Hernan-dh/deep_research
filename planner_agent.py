@@ -1,11 +1,6 @@
 from pydantic import BaseModel, Field
 from agents import Agent
-import os
-from dotenv import load_dotenv
-load_dotenv(override=True)
-
-MODEL_NAME = os.getenv("DEFAULT_MODEL_NAME", "gpt-5.4-mini")
-HOW_MANY_SEARCHES = int(os.getenv("HOW_MANY_SEARCHES", 5))
+from config import HOW_MANY_SEARCHES, MODEL_NAME
 
 
 INSTRUCTIONS = f"""

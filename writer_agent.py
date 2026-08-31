@@ -1,10 +1,6 @@
 from pydantic import BaseModel, Field
 from agents import Agent
-from dotenv import load_dotenv
-import os
-
-load_dotenv(override=True)
-MODEL_NAME = os.getenv("DEFAULT_MODEL_NAME", "gpt-5.4-mini")
+from config import MODEL_NAME
 
 INSTRUCTIONS = """
 You are a senior researcher tasked with writing a cohesive report for a research query.
