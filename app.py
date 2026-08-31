@@ -1,4 +1,5 @@
 import random
+import traceback
 
 import gradio as gr
 from dotenv import load_dotenv
@@ -11,8 +12,15 @@ SUGGESTED_EXAMPLES = random.sample(EXAMPLES, k=3)
 
 
 async def run(query: str, _history):
-    async for status_update in ResearchManager().run(query):
-        yield status_update
+    try:
+        async for status_update in ResearchManager().run(query):
+            yield status_update
+    except Exception:
+        traceback.print_exc()
+        yield (
+            "I couldn't complete this research request. Please try again; "
+            "if the problem continues, check the server log for provider details."
+        )
 
 
 with gr.Blocks(title="Deep Research") as ui:

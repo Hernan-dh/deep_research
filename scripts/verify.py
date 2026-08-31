@@ -109,7 +109,7 @@ def check_secrets(verification: Verification, files: list[Path]) -> None:
                 candidate = raw_candidate.lower()
                 if candidate.startswith(PLACEHOLDER_PREFIXES):
                     continue
-                if raw_candidate and re.fullmatch(r"[A-Z][A-Z0-9_]+", raw_candidate):
+                if raw_candidate and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", raw_candidate):
                     continue
                 verification.error(f"Sensitive value candidate at {path.relative_to(ROOT)}:{line_number}")
                 break

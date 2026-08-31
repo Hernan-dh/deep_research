@@ -1,13 +1,11 @@
-from agents import Agent, WebSearchTool, ModelSettings
-from config import MODEL_NAME
+from agents import Agent
+from model_provider import PRIMARY_MODEL
 
 INSTRUCTIONS = """
-You are a research assistant. Given a search term, you search the web for that term and 
-produce a concise summary of the results. The summary must 2-3 paragraphs and less than 300 words.
-Capture the main points and be succinct. Reply only with the summary.
+You are a research assistant. Given a search term and web results already collected by the
+application, produce a concise summary. The summary must be 2-3 paragraphs and less than 300 words.
+Capture the main points and be succinct. Preserve the titles and full URLs of the most relevant
+sources so the report writer can cite them. Reply only with the summary and source details.
 """
 
-settings = ModelSettings(tool_choice="required")
-tools = [WebSearchTool()]
-
-search_agent = Agent(name="Search Agent", instructions=INSTRUCTIONS, tools=tools, model=MODEL_NAME, model_settings=settings)
+search_agent = Agent(name="Search Agent", instructions=INSTRUCTIONS, model=PRIMARY_MODEL)

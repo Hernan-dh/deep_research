@@ -13,12 +13,17 @@
 
 | Group | Variables |
 |---|---|
-| Research agents | `OPENAI_API_KEY` |
+| Research agents | `GROQ_API_KEY`, `GEMINI_API_KEY` |
+| Web search | `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
 The complete list and non-private examples live in `.env.example`.
 
-The research model and number of searches are versioned in `config.py`. Change `MODEL_NAME` or `HOW_MANY_SEARCHES` there so the selected behavior is reviewed and committed with the code.
+The Gemini models, Groq fallback, provider endpoints, model timeout, search count, search provider order, search concurrency, search timeout, retries, and results per query are versioned in `config.py`. These settings are reviewed and committed with the code. Four bounded results per query keep the final writer prompt within practical provider quotas.
+
+## Model fallback
+
+Normal requests use Gemini 3.7 Flash. Recoverable provider or model-output failures try Gemini 3.6 Flash and then Groq GPT-OSS 120B. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Both provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
 
 ## Verification
 
@@ -50,12 +55,18 @@ Interactive publication:
 python scripts/publish.py
 ```
 
-The publishing script verifies the repository, builds a bounded representation of changed paths and text diffs, and requests an English Conventional Commit title and description. The fallback order is the comma-separated `GEMINI_COMMIT_MODELS` list followed by `GROQ_COMMIT_MODEL`. Its defaults match Agentic Twin: Gemini 3.5 Flash, Gemini 3.7 Flash, Gemini 3.5 Flash-Lite, Gemini 3.1 Flash-Lite, then Groq `openai/gpt-oss-120b`.
+The publishing script verifies the repository, builds a bounded representation of changed paths and text diffs, and requests an English Conventional Commit title and description. The fallback order is the comma-separated `GEMINI_COMMIT_MODELS` list followed by `GROQ_COMMIT_MODEL`. Its quality-first defaults match Agentic Twin: Gemini 3.7 Flash, Gemini 3.6 Flash, Gemini 3.5 Flash, Gemini 3.5 Flash-Lite, Gemini 3.1 Flash-Lite, then Groq `openai/gpt-oss-120b`.
 
 The command displays the proposal and requires typing `PUBLISH` before staging, re-verifying, committing, and pushing. To avoid external generation, provide both `--title` and `--description`. Cancellation before confirmation leaves the working tree unchanged.
 
 ## Diagnostics and recovery
 
 - If startup fails, confirm the environment variables and installed dependencies without printing secrets.
-- If research fails, verify the configured model, API quota, and web-search availability.
+- Logs identify every attempted model and the model that completed the request.
+- If Gemini models fail, confirm `GEMINI_API_KEY`, model availability, and provider quota.
+- If the cross-provider fallback fails, confirm `GROQ_API_KEY`, the configured Groq model, and provider quota.
+- If the planner returns malformed JSON, local Pydantic validation advances to the next model. The writer returns Markdown and source links are selected directly from search data, avoiding provider-side schema enforcement.
+- If Google search is skipped or fails, confirm `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID`, API enablement, quota, and Programmable Search Engine configuration. The application then falls back automatically to DDGS.
+- If every search provider fails, verify outbound internet access and DDGS backend availability. Searches run with concurrency two and a ten-second timeout; DDGS uses two bounded retries.
+- If a report cannot be completed, inspect its trace to confirm that searches returned at least five usable source URLs.
 - If publication metadata generation fails, review each reported provider attempt or supply `--title` and `--description` explicitly.
