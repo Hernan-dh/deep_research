@@ -52,12 +52,28 @@ CSS = """
     --dr-blue: #209dd7;
     --dr-purple: #753991;
 
+    width: 100% !important;
     max-width: 1080px !important;
+    min-width: 0 !important;
     margin: 0 auto !important;
     padding: 2.5rem 2rem 4rem !important;
     background: var(--dr-bg) !important;
     color: var(--dr-text) !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+}
+
+.gradio-container *,
+.gradio-container .main,
+.gradio-container .contain,
+.gradio-container .wrap {
+    min-width: 0;
+}
+
+.gradio-container .main,
+.gradio-container .contain,
+.gradio-container .wrap {
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 .gradio-container.dark,
