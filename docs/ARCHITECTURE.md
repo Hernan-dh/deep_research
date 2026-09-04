@@ -20,8 +20,8 @@ ResearchManager
 ```
 
 - `app.py`: Gradio chat interface with a browser-aware English/Spanish selector, localized examples and subtitle, and localized streaming status updates.
-- `config.py`: version-controlled Gemini/Groq models, provider endpoints, and search-count settings.
-- `model_provider.py`: executes agents through Gemini 3.7, Gemini 3.6, and Groq GPT-OSS 120B in quality order.
+- `config.py`: version-controlled Gemini/Groq/OpenRouter models, provider endpoints, and search-count settings.
+- `model_provider.py`: executes agents through Gemini 3.8/3.7/3.6, Groq GPT-OSS 120B, and OpenRouter Nemotron 3 Ultra/Super Free in quality order.
 - `research_manager.py`: orchestration, tracing, concurrency, and handoff between stages.
 - `planner_agent.py`: produces a structured search plan.
 - `search_tool.py`: queries Google Custom Search first and falls back to keyless DDGS, with bounded timeouts and retries.
@@ -41,7 +41,7 @@ ResearchManager
 
 - User queries, search results, and model responses are untrusted data.
 - Credentials come from the environment and must never appear in Git, documentation, prompts, or logs.
-- Groq, Gemini, Google Custom Search, and DDGS search backends are external services.
+- Groq, Gemini, OpenRouter, Google Custom Search, and DDGS search backends are external services.
 - OpenAI tracing is disabled and the runtime does not call OpenAI models or hosted tools.
 - Each research request normally needs only two model executions: planning and writing.
 - The publishing script sends Gemini or Groq a size-limited representation of changed paths and text diffs. Provider keys remain in the environment.

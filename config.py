@@ -1,11 +1,18 @@
 """Version-controlled application settings."""
 
-PRIMARY_MODEL_NAME = "gemini-3.7-flash"
+PRIMARY_MODEL_NAME = "gemini-3.8-flash"
 PRIMARY_MODEL_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
-SECONDARY_MODEL_NAME = "gemini-3.6-flash"
+SECONDARY_MODEL_NAME = "gemini-3.7-flash"
 SECONDARY_MODEL_BASE_URL = PRIMARY_MODEL_BASE_URL
+TERTIARY_MODEL_NAME = "gemini-3.6-flash"
+TERTIARY_MODEL_BASE_URL = PRIMARY_MODEL_BASE_URL
 FALLBACK_MODEL_NAME = "openai/gpt-oss-120b"
 FALLBACK_MODEL_BASE_URL = "https://api.groq.com/openai/v1"
+OPENROUTER_MODEL_NAMES = (
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+)
+OPENROUTER_MODEL_BASE_URL = "https://openrouter.ai/api/v1"
 MODEL_REQUEST_TIMEOUT_SECONDS = 90
 MODEL_NAME = PRIMARY_MODEL_NAME
 HOW_MANY_SEARCHES = 5

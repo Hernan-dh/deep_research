@@ -17,10 +17,14 @@ from config import (
     FALLBACK_MODEL_BASE_URL,
     FALLBACK_MODEL_NAME,
     MODEL_REQUEST_TIMEOUT_SECONDS,
+    OPENROUTER_MODEL_BASE_URL,
+    OPENROUTER_MODEL_NAMES,
     PRIMARY_MODEL_BASE_URL,
     PRIMARY_MODEL_NAME,
     SECONDARY_MODEL_BASE_URL,
     SECONDARY_MODEL_NAME,
+    TERTIARY_MODEL_BASE_URL,
+    TERTIARY_MODEL_NAME,
 )
 
 load_dotenv(override=True)
@@ -28,8 +32,10 @@ set_tracing_disabled(True)
 
 _groq_api_key = os.getenv("GROQ_API_KEY", "").strip()
 _gemini_api_key = os.getenv("GEMINI_API_KEY", "").strip()
+_openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
 GROQ_CLIENT_PLACEHOLDER = "not-configured"
 GEMINI_CLIENT_PLACEHOLDER = "not-configured"
+OPENROUTER_CLIENT_PLACEHOLDER = "not-configured"
 
 PRIMARY_MODEL = OpenAIChatCompletionsModel(
     model=PRIMARY_MODEL_NAME,
@@ -51,6 +57,16 @@ SECONDARY_MODEL = OpenAIChatCompletionsModel(
     ),
 )
 
+TERTIARY_MODEL = OpenAIChatCompletionsModel(
+    model=TERTIARY_MODEL_NAME,
+    openai_client=AsyncOpenAI(
+        api_key=_gemini_api_key or GEMINI_CLIENT_PLACEHOLDER,
+        base_url=TERTIARY_MODEL_BASE_URL,
+        timeout=MODEL_REQUEST_TIMEOUT_SECONDS,
+        max_retries=0,
+    ),
+)
+
 FALLBACK_MODEL = OpenAIChatCompletionsModel(
     model=FALLBACK_MODEL_NAME,
     openai_client=AsyncOpenAI(
@@ -59,6 +75,19 @@ FALLBACK_MODEL = OpenAIChatCompletionsModel(
         timeout=MODEL_REQUEST_TIMEOUT_SECONDS,
         max_retries=0,
     ),
+)
+
+OPENROUTER_MODELS = tuple(
+    OpenAIChatCompletionsModel(
+        model=model_name,
+        openai_client=AsyncOpenAI(
+            api_key=_openrouter_api_key or OPENROUTER_CLIENT_PLACEHOLDER,
+            base_url=OPENROUTER_MODEL_BASE_URL,
+            timeout=MODEL_REQUEST_TIMEOUT_SECONDS,
+            max_retries=0,
+        ),
+    )
+    for model_name in OPENROUTER_MODEL_NAMES
 )
 
 RECOVERABLE_MODEL_ERRORS = (APIError, ModelBehaviorError, ValidationError)
@@ -102,6 +131,7 @@ async def run_with_fallback(
             (
                 (f"Gemini/{PRIMARY_MODEL_NAME}", PRIMARY_MODEL),
                 (f"Gemini/{SECONDARY_MODEL_NAME}", SECONDARY_MODEL),
+                (f"Gemini/{TERTIARY_MODEL_NAME}", TERTIARY_MODEL),
             )
         )
     else:
@@ -110,9 +140,19 @@ async def run_with_fallback(
         attempts.append((f"Groq/{FALLBACK_MODEL_NAME}", FALLBACK_MODEL))
     else:
         print("[models] GROQ_API_KEY is not configured; skipping Groq")
+    if _openrouter_api_key:
+        attempts.extend(
+            (f"OpenRouter/{name}", model)
+            for name, model in zip(OPENROUTER_MODEL_NAMES, OPENROUTER_MODELS)
+        )
+    else:
+        print("[models] OPENROUTER_API_KEY is not configured; skipping OpenRouter")
 
     if not attempts:
-        raise RuntimeError("Configure GEMINI_API_KEY or GROQ_API_KEY to run the research agents.")
+        raise RuntimeError(
+            "Configure GEMINI_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY "
+            "to run the research agents."
+        )
 
     failures: list[str] = []
     for label, model in attempts:

@@ -13,7 +13,7 @@
 
 | Group | Variables |
 |---|---|
-| Research agents | `GROQ_API_KEY`, `GEMINI_API_KEY` |
+| Research agents | `GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY` |
 | Web search | `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
@@ -23,7 +23,7 @@ The Gemini models, Groq fallback, provider endpoints, model timeout, search coun
 
 ## Model fallback
 
-Normal requests use Gemini 3.7 Flash. Recoverable provider or model-output failures try Gemini 3.6 Flash and then Groq GPT-OSS 120B. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Both provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
+Normal requests use Gemini 3.8 Flash. Recoverable provider or model-output failures try Gemini 3.7/3.6 Flash, Groq GPT-OSS 120B, and OpenRouter Nemotron 3 Ultra/Super Free. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
 
 ## Render deployment
 
@@ -61,7 +61,7 @@ Interactive publication:
 python scripts/publish.py
 ```
 
-The publishing script verifies the repository, builds a bounded representation of changed paths and text diffs, and requests an English Conventional Commit title and description. The fallback order is the comma-separated `GEMINI_COMMIT_MODELS` list followed by `GROQ_COMMIT_MODEL`. Its quality-first defaults match Agentic Twin: Gemini 3.7 Flash, Gemini 3.6 Flash, Gemini 3.5 Flash, Gemini 3.5 Flash-Lite, Gemini 3.1 Flash-Lite, then Groq `openai/gpt-oss-120b`.
+The publishing script verifies the repository, builds a bounded representation of changed paths and text diffs, and requests an English Conventional Commit title and description. The fallback order is the comma-separated `GEMINI_COMMIT_MODELS` list followed by `GROQ_COMMIT_MODEL`. Its quality-first defaults match Agentic Twin: Gemini 3.8 Flash, Gemini 3.7 Flash, Gemini 3.6 Flash, Gemini 3.5 Flash, Gemini 3.5 Flash-Lite, Gemini 3.1 Flash-Lite, then Groq `openai/gpt-oss-120b`.
 
 The command displays the proposal and requires typing `PUBLISH` before staging, re-verifying, committing, and pushing. To avoid external generation, provide both `--title` and `--description`. Cancellation before confirmation leaves the working tree unchanged.
 
@@ -70,7 +70,7 @@ The command displays the proposal and requires typing `PUBLISH` before staging, 
 - If startup fails, confirm the environment variables and installed dependencies without printing secrets.
 - Logs identify every attempted model and the model that completed the request.
 - If Gemini models fail, confirm `GEMINI_API_KEY`, model availability, and provider quota.
-- If the cross-provider fallback fails, confirm `GROQ_API_KEY`, the configured Groq model, and provider quota.
+- If the cross-provider fallback fails, confirm the Gemini, Groq, and OpenRouter keys, configured model names, and provider quotas.
 - If the planner returns malformed JSON, local Pydantic validation advances to the next model. The writer returns Markdown and source links are selected directly from search data, avoiding provider-side schema enforcement.
 - If Google search is skipped or fails, confirm `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID`, API enablement, quota, and Programmable Search Engine configuration. The application then falls back automatically to DDGS.
 - If every search provider fails, verify outbound internet access and DDGS backend availability. Searches run with concurrency two and a ten-second timeout; DDGS uses two bounded retries.
