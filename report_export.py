@@ -140,7 +140,7 @@ def download_controls(language):
     """Create controls and a private report state for one localized chat."""
     spanish = language == "Español"
     report = gr.State(None)
-    with gr.Row():
+    with gr.Row(elem_id="dr-download-controls-es" if spanish else "dr-download-controls-en"):
         file_format = gr.Dropdown(
             choices=[("Markdown (.md)", "md"), ("Word (.docx)", "docx"), ("PDF (.pdf)", "pdf")],
             value="md", label="Formato" if spanish else "Format", interactive=True,

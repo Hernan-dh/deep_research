@@ -520,6 +520,29 @@ CSS += """
 .gradio-container :is(#dr-chat-en, #dr-chat-es) .message-row[data-role='user'] :is(.message, .message-bubble, .bubble) * {
     color: #111412 !important;
 }
+
+#dr-chat-shell-en, #dr-chat-shell-es { gap: 10px; }
+#dr-download-controls-en, #dr-download-controls-es {
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 8px;
+    border: 1px solid rgb(17 20 18 / 18%);
+    background: #1d221f;
+}
+#dr-download-controls-en > div, #dr-download-controls-es > div { margin: 0; }
+#dr-download-controls-en label, #dr-download-controls-es label { display: none; }
+#dr-download-controls-en button, #dr-download-controls-es button {
+    min-height: 34px;
+    border: 0;
+    border-radius: 2px;
+    background: #c7ff37;
+    color: #111412;
+    font: 500 10px var(--mono);
+    text-transform: uppercase;
+}
+#dr-download-controls-en button:hover, #dr-download-controls-es button:hover { background: #e0ff8a; }
+#dr-download-controls-en .wrap, #dr-download-controls-es .wrap { min-width: 150px; }
 """
 
 JS = """

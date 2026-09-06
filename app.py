@@ -67,36 +67,38 @@ with gr.Blocks(title="Deep Research", delete_cache=(3600, 86400)) as ui:
                 elem_id="language-selector",
             )
     with gr.Group(visible=True) as english_chat:
-        english_chatbot = gr.Chatbot(elem_id="dr-chat-en", height=470)
-        english_report, english_download = download_controls("English")
-        gr.ChatInterface(
-            fn=run_english,
-            show_progress="hidden",
-            examples=[item[0] for item in suggested_examples("English")],
-            chatbot=english_chatbot,
-            additional_outputs=[english_report, english_download],
-            textbox=gr.Textbox(
-                placeholder="Ask a research question...",
-                submit_btn="Investigate",
-            ),
-            flagging_mode="never",
-        )
+        with gr.Column(elem_id="dr-chat-shell-en", variant="panel"):
+            english_chatbot = gr.Chatbot(elem_id="dr-chat-en", height=470)
+            english_report, english_download = download_controls("English")
+            gr.ChatInterface(
+                fn=run_english,
+                show_progress="hidden",
+                examples=[item[0] for item in suggested_examples("English")],
+                chatbot=english_chatbot,
+                additional_outputs=[english_report, english_download],
+                textbox=gr.Textbox(
+                    placeholder="Ask a research question...",
+                    submit_btn="Investigate",
+                ),
+                flagging_mode="never",
+            )
         english_chatbot.clear(lambda: (None, empty_download()), outputs=[english_report, english_download], queue=False)
     with gr.Group(visible=False) as spanish_chat:
-        spanish_chatbot = gr.Chatbot(elem_id="dr-chat-es", height=470)
-        spanish_report, spanish_download = download_controls("Español")
-        gr.ChatInterface(
-            fn=run_spanish,
-            show_progress="hidden",
-            examples=[item[0] for item in suggested_examples("Español")],
-            chatbot=spanish_chatbot,
-            additional_outputs=[spanish_report, spanish_download],
-            textbox=gr.Textbox(
-                placeholder="Hacé una pregunta de investigación...",
-                submit_btn="Investigar",
-            ),
-            flagging_mode="never",
-        )
+        with gr.Column(elem_id="dr-chat-shell-es", variant="panel"):
+            spanish_chatbot = gr.Chatbot(elem_id="dr-chat-es", height=470)
+            spanish_report, spanish_download = download_controls("Español")
+            gr.ChatInterface(
+                fn=run_spanish,
+                show_progress="hidden",
+                examples=[item[0] for item in suggested_examples("Español")],
+                chatbot=spanish_chatbot,
+                additional_outputs=[spanish_report, spanish_download],
+                textbox=gr.Textbox(
+                    placeholder="Hacé una pregunta de investigación...",
+                    submit_btn="Investigar",
+                ),
+                flagging_mode="never",
+            )
         spanish_chatbot.clear(lambda: (None, empty_download()), outputs=[spanish_report, spanish_download], queue=False)
     language.change(
         fn=localized_ui,
