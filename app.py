@@ -3,6 +3,7 @@ import traceback
 import os
 
 import gradio as gr
+from report_export import download_controls, empty_download
 from dotenv import load_dotenv
 from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML, SPANISH_EXAMPLES
@@ -24,16 +25,19 @@ def localized_ui(language: str):
 
 
 async def run(query: str, _history, language: str):
-    yield "Preparando la investigación y el plan de búsquedas…" if language == "Español" else "Preparing the research and search plan…"
+    initial_status = "Preparando la investigaci\u00f3n y el plan de b\u00fasquedas\u2026" if language == "Espa\u00f1ol" else "Preparing the research and search plan..."
+    yield initial_status, None, empty_download()
     try:
+        report = None
         async for status_update in ResearchManager().run(query, language):
-            yield status_update
+            report = status_update
+            yield status_update, None, empty_download()
+        if report:
+            yield report, report, empty_download()
     except Exception:
         traceback.print_exc()
-        if language == "Español":
-            yield "No pude completar la investigación. Intentá nuevamente o revisá el log del servidor."
-        else:
-            yield "I couldn't complete this research request. Please try again or check the server log."
+        error = "No pude completar la investigaci\u00f3n. Intent\u00e1 nuevamente." if language == "Espa\u00f1ol" else "I couldn't complete this research request. Please try again."
+        yield error, None, empty_download()
 
 
 async def run_english(query: str, history):
@@ -46,7 +50,7 @@ async def run_spanish(query: str, history):
         yield update
 
 
-with gr.Blocks(title="Deep Research") as ui:
+with gr.Blocks(title="Deep Research", delete_cache=(3600, 86400)) as ui:
     with gr.Row(elem_id="title-row"):
         with gr.Column(scale=1, min_width=0, elem_id="header-copy"):
             header = gr.HTML(HEADER_HTML)
@@ -63,29 +67,37 @@ with gr.Blocks(title="Deep Research") as ui:
                 elem_id="language-selector",
             )
     with gr.Group(visible=True) as english_chat:
+        english_chatbot = gr.Chatbot(elem_id="dr-chat-en", height=470)
+        english_report, english_download = download_controls("English")
         gr.ChatInterface(
             fn=run_english,
             show_progress="hidden",
             examples=[item[0] for item in suggested_examples("English")],
-            chatbot=gr.Chatbot(elem_id="dr-chat-en", height=470),
+            chatbot=english_chatbot,
+            additional_outputs=[english_report, english_download],
             textbox=gr.Textbox(
                 placeholder="Ask a research question...",
                 submit_btn="Investigate",
             ),
             flagging_mode="never",
         )
+        english_chatbot.clear(lambda: (None, empty_download()), outputs=[english_report, english_download], queue=False)
     with gr.Group(visible=False) as spanish_chat:
+        spanish_chatbot = gr.Chatbot(elem_id="dr-chat-es", height=470)
+        spanish_report, spanish_download = download_controls("Español")
         gr.ChatInterface(
             fn=run_spanish,
             show_progress="hidden",
             examples=[item[0] for item in suggested_examples("Español")],
-            chatbot=gr.Chatbot(elem_id="dr-chat-es", height=470),
+            chatbot=spanish_chatbot,
+            additional_outputs=[spanish_report, spanish_download],
             textbox=gr.Textbox(
                 placeholder="Hacé una pregunta de investigación...",
                 submit_btn="Investigar",
             ),
             flagging_mode="never",
         )
+        spanish_chatbot.clear(lambda: (None, empty_download()), outputs=[spanish_report, spanish_download], queue=False)
     language.change(
         fn=localized_ui,
         inputs=language,
