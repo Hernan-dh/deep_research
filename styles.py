@@ -459,11 +459,7 @@ body {
 }
 
 #dr-chat-en,
-#dr-chat-en > div,
-#dr-chat-en [class*="container"],
-#dr-chat-es,
-#dr-chat-es > div,
-#dr-chat-es [class*="container"] {
+#dr-chat-es {
     background-color: #181c19 !important;
     color: #e9e9e3 !important;
 }

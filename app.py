@@ -65,6 +65,7 @@ with gr.Blocks(title="Deep Research") as ui:
     with gr.Group(visible=True) as english_chat:
         gr.ChatInterface(
             fn=run_english,
+            show_progress="hidden",
             examples=[item[0] for item in suggested_examples("English")],
             chatbot=gr.Chatbot(elem_id="dr-chat-en", height=470),
             textbox=gr.Textbox(
@@ -76,6 +77,7 @@ with gr.Blocks(title="Deep Research") as ui:
     with gr.Group(visible=False) as spanish_chat:
         gr.ChatInterface(
             fn=run_spanish,
+            show_progress="hidden",
             examples=[item[0] for item in suggested_examples("Español")],
             chatbot=gr.Chatbot(elem_id="dr-chat-es", height=470),
             textbox=gr.Textbox(

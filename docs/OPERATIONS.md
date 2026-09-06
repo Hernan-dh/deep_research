@@ -76,3 +76,5 @@ The command displays the proposal and requires typing `PUBLISH` before staging, 
 - If every search provider fails, verify outbound internet access and DDGS backend availability. Searches run with concurrency two and a ten-second timeout; DDGS uses two bounded retries.
 - If a report cannot be completed, inspect its trace to confirm that searches returned at least five usable source URLs.
 - If publication metadata generation fails, review each reported provider attempt or supply `--title` and `--description` explicitly.
+
+The research chat uses streamed status text with show_progress hidden. Keep chatbot background rules scoped to the root and message bubbles: styling every child div or container can make loading layers opaque and cover the conversation.
