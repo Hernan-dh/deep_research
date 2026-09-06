@@ -25,7 +25,7 @@ def localized_ui(language: str):
 
 
 async def run(query: str, _history, language: str):
-    initial_status = "Preparando la investigaci\u00f3n y el plan de b\u00fasquedas\u2026" if language == "Espa\u00f1ol" else "Preparing the research and search plan..."
+    initial_status = "**Research Planner** está analizando la consulta y preparando un plan estructurado de búsquedas web." if language == "Espa\u00f1ol" else "**Research Planner** is analyzing the question and preparing a structured web-search plan."
     yield initial_status, None, empty_download()
     try:
         report = None

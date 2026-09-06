@@ -15,11 +15,17 @@ class ResearchManager:
         yield "Iniciando investigación..." if spanish else "Starting research..."
         search_plan = await self.plan_searches(query)
         yield (
+            f"**Web Search Worker** está ejecutando {len(search_plan.searches)} búsquedas con **Google Custom Search**; si no está disponible, usa el fallback **DDGS**."
+            if spanish else
+            f"**Web Search Worker** is running {len(search_plan.searches)} searches with **Google Custom Search**; if unavailable, it uses the **DDGS** fallback."
+        )
+        yield (
             f"Plan listo, iniciando {len(search_plan.searches)} búsquedas..."
             if spanish else
             f"Searches planned, starting {len(search_plan.searches)} searches..."
         )
         search_results = await self.perform_searches(search_plan)
+        yield "**Report Writer** está sintetizando las fuentes recuperadas y redactando el informe." if spanish else "**Report Writer** is synthesizing the retrieved sources and writing the report."
         yield "Búsquedas completas, redactando informe..." if spanish else "Searches complete, writing report..."
         report = await self.write_report(query, search_results, language)
         yield self.render_report(report, search_results, language)
