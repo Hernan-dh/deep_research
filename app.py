@@ -24,6 +24,7 @@ def localized_ui(language: str):
 
 
 async def run(query: str, _history, language: str):
+    yield "Preparando la investigación y el plan de búsquedas…" if language == "Español" else "Preparing the research and search plan…"
     try:
         async for status_update in ResearchManager().run(query, language):
             yield status_update

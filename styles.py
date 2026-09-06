@@ -514,6 +514,18 @@ footer { display: none !important; }
 }
 """
 
+CSS += """
+.gradio-container :is(#dr-chat-en, #dr-chat-es) .message-row.user-row :is(.message, .message-bubble, .bubble),
+.gradio-container :is(#dr-chat-en, #dr-chat-es) .message-row[data-role='user'] :is(.message, .message-bubble, .bubble) {
+    background: #c7ff37 !important;
+    color: #111412 !important;
+}
+.gradio-container :is(#dr-chat-en, #dr-chat-es) .message-row.user-row :is(.message, .message-bubble, .bubble) *,
+.gradio-container :is(#dr-chat-en, #dr-chat-es) .message-row[data-role='user'] :is(.message, .message-bubble, .bubble) * {
+    color: #111412 !important;
+}
+"""
+
 JS = """
 () => {
     const focus = () => {
