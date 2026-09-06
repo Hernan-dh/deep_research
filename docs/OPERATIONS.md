@@ -78,3 +78,19 @@ The command displays the proposal and requires typing `PUBLISH` before staging, 
 - If publication metadata generation fails, review each reported provider attempt or supply `--title` and `--description` explicitly.
 
 The research chat uses streamed status text with show_progress hidden. Keep chatbot background rules scoped to the root and message bubbles: styling every child div or container can make loading layers opaque and cover the conversation.
+
+## Public-source verification
+
+See [README](../README.md) for the reproducible setup. CI installs dependencies before invoking the verifier. Tests disable dotenv loading and provider telemetry and use synthetic inputs or mocked external calls; passing unit tests does not certify live services or production security.
+
+The verifier prefers the repository .venv. Install the pinned requirements before running it. Direct dependencies are pinned to versions exercised locally; transitive resolution can still vary.
+
+
+## Publication review
+
+Before publishing, run the verifier and review git diff and git status --short,
+especially new files. Keep real credentials in local environment files or hosting
+secrets, and preserve upstream license notices. Automated secret checks cover
+recognizable patterns in current source files; they do not certify the absence of
+secrets or scan every historical commit, remote ref, hosting log or fork. Removing
+a file from the working tree does not remove it from Git history.
