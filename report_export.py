@@ -141,11 +141,12 @@ def download_controls(language):
     spanish = language == "Español"
     report = gr.State(None)
     with gr.Row(elem_id="dr-download-controls-es" if spanish else "dr-download-controls-en"):
+        gr.Markdown("Formato" if spanish else "Format", elem_classes="dr-format-label", scale=1)
         file_format = gr.Dropdown(
             choices=[("Markdown (.md)", "md"), ("Word (.docx)", "docx"), ("PDF (.pdf)", "pdf")],
-            value="md", label="Formato" if spanish else "Format", interactive=True,
+            value="md", show_label=False, interactive=True, scale=1,
         )
-        button = gr.Button("Preparar descarga" if spanish else "Prepare download")
+        button = gr.Button("Preparar descarga" if spanish else "Prepare download", scale=2)
     output = gr.File(label="Descargar informe" if spanish else "Download report", visible=False, interactive=False)
 
     def download(markdown, selected_format):

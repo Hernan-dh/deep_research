@@ -531,6 +531,7 @@ CSS += """
     background: #1d221f;
 }
 #dr-download-controls-en > div, #dr-download-controls-es > div { margin: 0; }
+#dr-download-controls-en .dr-format-label, #dr-download-controls-es .dr-format-label { display: flex; align-items: center; margin: 0; color: #f1f0ec; font: 400 16px var(--mono); }
 #dr-download-controls-en label, #dr-download-controls-es label { display: none; }
 #dr-download-controls-en button, #dr-download-controls-es button {
     min-height: 34px;
