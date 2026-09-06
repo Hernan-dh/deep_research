@@ -14,7 +14,7 @@
 | Group | Variables |
 |---|---|
 | Research agents | `GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY` |
-| Web search | `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID` |
+| Web search | `SERPER_API_KEY`, `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
 The complete list and non-private examples live in `.env.example`.

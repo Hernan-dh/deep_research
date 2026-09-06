@@ -17,7 +17,7 @@ uv pip install -r requirements.txt
 
 Copy `.env.example` to `.env` (`Copy-Item .env.example .env` in PowerShell, or `cp .env.example .env` on Linux/macOS), then replace only the placeholders for the providers you intend to use. Leave unused credentials empty. Never commit the real `.env`.
 
-Configure at least one model-provider key. Google search is optional and requires both Google variables; DDGS is the keyless fallback. Open `http://127.0.0.1:7860` and submit a research question.
+Configure at least one model-provider key and `SERPER_API_KEY` for live search. Google Custom Search is optional and requires both Google variables; DDGS is the keyless fallback. Open `http://127.0.0.1:7860` and submit a research question.
 
 ```sh
 uv run --no-project python app.py
@@ -39,7 +39,7 @@ save a local copy.
 ## Architecture
 
 ```text
-Gradio query -> structured planner -> Google search / DDGS fallback -> writer -> deterministic source selection
+Gradio query -> structured planner -> Serper / Google / DDGS fallback -> writer -> deterministic source selection
 ```
 
 See [architecture](docs/ARCHITECTURE.md) for components, data flow and trust boundaries, and [operations](docs/OPERATIONS.md) for configuration and recovery.

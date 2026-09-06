@@ -21,5 +21,6 @@ SEARCH_CONCURRENCY = 2
 SEARCH_REQUEST_TIMEOUT_SECONDS = 10
 SEARCH_RETRIES = 2
 SEARCH_RETRY_DELAY_SECONDS = 1
-SEARCH_PROVIDER_ORDER = ("google", "ddgs")
+SEARCH_PROVIDER_ORDER = ("serper", "google", "ddgs")
 GOOGLE_SEARCH_API_URL = "https://customsearch.googleapis.com/customsearch/v1"
+SERPER_SEARCH_API_URL = "https://google.serper.dev/search"

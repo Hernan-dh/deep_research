@@ -41,11 +41,11 @@ class ResearchTests(unittest.TestCase):
         )
         self.assertEqual(plan.searches[0].query, "example")
 
-    def test_google_failure_uses_ddgs(self):
+    def test_search_provider_failures_use_ddgs(self):
         expected = [{"url": "https://example.com", "title": "Example", "snippet": "Text"}]
-        with patch.object(search_tool, "_search_google", side_effect=RuntimeError("unavailable")), patch.object(
-            search_tool, "_search_ddgs", return_value=expected
-        ) as fallback:
+        with patch.object(search_tool, "_search_serper", side_effect=RuntimeError("unavailable")), patch.object(
+            search_tool, "_search_google", side_effect=RuntimeError("unavailable")
+        ), patch.object(search_tool, "_search_ddgs", return_value=expected) as fallback:
             self.assertEqual(search_tool.search_web("test"), expected)
         fallback.assert_called_once_with("test")
 
