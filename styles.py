@@ -546,6 +546,23 @@ CSS += """
 #dr-download-controls-en .wrap, #dr-download-controls-es .wrap { min-width: 150px; }
 """
 
+CSS += r"""
+/* Shared chat typography scale: readable prose, compact controls. */
+.dr-titles h1 { font-size:clamp(1.8rem,4vw,2.6rem)!important; }
+.chatbot,.chatbot * { font-family:var(--dr-sans)!important; }
+.message-row :is(.message,.message-bubble,.bubble),.message-row :is(.message,.message-bubble,.bubble) :is(p,li) { font-size:16px!important; line-height:1.65!important; }
+.message-row :is(.message,.message-bubble,.bubble) h1 { font-size:24px!important; line-height:1.25!important; }
+.message-row :is(.message,.message-bubble,.bubble) h2 { font-size:20px!important; line-height:1.3!important; }
+.message-row :is(.message,.message-bubble,.bubble) h3 { font-size:18px!important; line-height:1.35!important; }
+textarea,input[type='text'],#dr-query textarea,#dr-query input { font:400 16px/1.5 var(--dr-sans)!important; }
+button,#dr-run { font:500 11px/1.2 var(--dr-mono)!important; }
+.message-row :is(code,pre) { font-family:var(--dr-mono)!important; }
+#dr-examples td,#dr-examples button { font:500 14px/1.45 var(--dr-sans)!important; text-transform:none!important; }
+#language-label p,.dr-examples-label { font-size:10px!important; }
+#dr-download-controls-en .dr-format-label,#dr-download-controls-es .dr-format-label { font-size:14px!important; }
+@media (max-width:640px) { .message-row :is(.message,.message-bubble,.bubble),.message-row :is(.message,.message-bubble,.bubble) :is(p,li) { font-size:15px!important; } }
+"""
+
 JS = """
 () => {
     const focus = () => {
