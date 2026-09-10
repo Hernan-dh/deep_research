@@ -9,6 +9,10 @@
 
 `.env` is excluded from Git and must never be copied into documentation, commits, or diagnostic output.
 
+## Follow-up conversation
+
+After a completed report, ordinary chat messages are answered only from that report and its listed sources; they do not run web searches. Use `/new-report <question>` to start a new research run.
+
 ## Configuration
 
 | Group | Variables |
