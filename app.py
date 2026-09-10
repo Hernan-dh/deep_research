@@ -3,14 +3,43 @@ import traceback
 import os
 
 import gradio as gr
+from agents import Agent
 from report_export import download_controls, empty_download
 from dotenv import load_dotenv
 from research_manager import ResearchManager
+from model_provider import run_with_fallback
 from styles import CSS, JS, EXAMPLES, HEADER_HTML, SPANISH_EXAMPLES
 
 load_dotenv(override=True)
 
 SUGGESTED_INDICES = random.sample(range(len(EXAMPLES)), k=3)
+NEW_REPORT_COMMAND = "/new-report"
+
+
+def prior_report(history) -> str | None:
+    for message in reversed(history or []):
+        if message.get("role") != "assistant":
+            continue
+        content = message.get("content")
+        if isinstance(content, str) and "### Sources" in content:
+            return content
+    return None
+
+
+def new_report_query(query: str) -> str | None:
+    command = query.strip()
+    if not command.lower().startswith(NEW_REPORT_COMMAND):
+        return None
+    return command[len(NEW_REPORT_COMMAND):].strip()
+
+
+async def answer_follow_up(question: str, report: str, language: str) -> str:
+    agent = Agent(
+        name="Report Follow-up Agent",
+        instructions=("Answer using only the completed report and its sources. Do not research or invent facts. "
+                      "If unsupported, say so and suggest /new-report <question>."),
+    )
+    return str(await run_with_fallback(agent, f"Language: {language}\n\nReport:\n{report}\n\nQuestion: {question}"))
 
 
 def suggested_examples(language: str) -> list[list[str]]:
@@ -24,7 +53,22 @@ def localized_ui(language: str):
     return header, gr.Group(visible=language == "English"), gr.Group(visible=language == "Español")
 
 
-async def run(query: str, _history, language: str):
+async def run(query: str, history, language: str):
+    query = (query or "").strip()
+    report = prior_report(history)
+    requested_report = new_report_query(query)
+    if requested_report is not None:
+        if not requested_report:
+            yield ("Use /new-report followed by a research question." if language == "English" else "Usá /new-report seguido de una pregunta de investigación."), None, empty_download()
+            return
+        query = requested_report
+    elif report:
+        try:
+            yield await answer_follow_up(query, report, language), report, empty_download()
+        except Exception:
+            traceback.print_exc()
+            yield ("I couldn't answer from the current report. Try /new-report <question>." if language == "English" else "No pude responder a partir del informe actual. Probá /new-report <pregunta>."), report, empty_download()
+        return
     initial_status = "**Research Planner** está analizando la consulta y preparando un plan estructurado de búsquedas web." if language == "Espa\u00f1ol" else "**Research Planner** is analyzing the question and preparing a structured web-search plan."
     yield initial_status, None, empty_download()
     try:
