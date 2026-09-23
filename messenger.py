@@ -29,7 +29,6 @@ pushover_token = os.getenv("PUSHOVER_TOKEN")
 pushover_url = "https://api.pushover.net/1/messages.json"
 
 def push(message):
-    print(f"Push: {message}")
+    print("[notification] channel=pushover status=sending", flush=True)
     payload = {"user": pushover_user, "token": pushover_token, "message": message}
     requests.post(pushover_url, data=payload)
-

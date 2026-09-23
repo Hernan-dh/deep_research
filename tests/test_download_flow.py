@@ -22,7 +22,7 @@ class DownloadFlowTests(unittest.IsolatedAsyncioTestCase):
                 yield "Planning"
                 raise RuntimeError("simulated outage")
 
-        with patch.object(app, "ResearchManager", Manager), patch.object(app.traceback, "print_exc"):
+        with patch.object(app, "ResearchManager", Manager), patch.object(app, "log_failure"):
             updates = [value async for value in app.run("Example", [], "English")]
         self.assertTrue(all(value[1] is None for value in updates))
-        self.assertIn("couldn't", updates[-1][0])
+        self.assertIn("unavailable", updates[-1][0])

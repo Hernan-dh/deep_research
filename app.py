@@ -1,5 +1,4 @@
 import random
-import traceback
 import os
 
 import gradio as gr
@@ -9,6 +8,7 @@ from dotenv import load_dotenv
 from research_manager import ResearchManager
 from model_provider import run_with_fallback
 from styles import CSS, JS, EXAMPLES, HEADER_HTML, SPANISH_EXAMPLES
+from runtime_safety import log_failure, public_error_message
 
 load_dotenv(override=True)
 
@@ -65,9 +65,9 @@ async def run(query: str, history, language: str):
     elif report:
         try:
             yield await answer_follow_up(query, report, language), report, empty_download()
-        except Exception:
-            traceback.print_exc()
-            yield ("I couldn't answer from the current report. Try /new-report <question>." if language == "English" else "No pude responder a partir del informe actual. Probá /new-report <pregunta>."), report, empty_download()
+        except Exception as error:
+            log_failure("research.follow_up", error)
+            yield public_error_message(error, language, "la respuesta" if language == "Español" else "the answer"), report, empty_download()
         return
     initial_status = "**Research Planner** está analizando la consulta y preparando un plan estructurado de búsquedas web." if language == "Espa\u00f1ol" else "**Research Planner** is analyzing the question and preparing a structured web-search plan."
     yield initial_status, None, empty_download()
@@ -78,10 +78,10 @@ async def run(query: str, history, language: str):
             yield status_update, None, empty_download()
         if report:
             yield report, report, empty_download()
-    except Exception:
-        traceback.print_exc()
-        error = "No pude completar la investigaci\u00f3n. Intent\u00e1 nuevamente." if language == "Espa\u00f1ol" else "I couldn't complete this research request. Please try again."
-        yield error, None, empty_download()
+    except Exception as error:
+        log_failure("research.run", error)
+        message = public_error_message(error, language, "la investigación" if language == "Español" else "the research request")
+        yield message, None, empty_download()
 
 
 async def run_english(query: str, history):
