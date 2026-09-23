@@ -148,11 +148,12 @@ with gr.Blocks(title="Deep Research", delete_cache=(3600, 86400)) as ui:
         fn=localized_ui,
         inputs=language,
         outputs=[header, english_chat, spanish_chat],
+        js="(language) => { if (window.__deepResearchAutoLanguage) delete window.__deepResearchAutoLanguage; else try { localStorage.setItem('deep-research-language', language); } catch {} return language; }",
     )
     detect_language = ui.load(
         fn=None,
         outputs=language,
-        js="() => navigator.language.toLowerCase().startsWith('es') ? 'Español' : 'English'",
+        js="() => { try { const saved = localStorage.getItem('deep-research-language'); if (saved === 'Español' || saved === 'English') return saved; } catch {} window.__deepResearchAutoLanguage = true; return navigator.language.toLowerCase().startsWith('es') ? 'Español' : 'English'; }",
     )
     detect_language.then(
         fn=localized_ui,
