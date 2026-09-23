@@ -29,11 +29,13 @@ The Gemini models, Groq fallback, provider endpoints, model timeout, search coun
 
 Normal requests use Gemini 3.8 Flash. Recoverable provider or model-output failures try Gemini 3.7/3.6 Flash, Groq GPT-OSS 120B, and OpenRouter Nemotron 3 Ultra/Super Free. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
 
-## Render deployment
+## Container deployment
 
-The repository includes `render.yaml` for a free Render web service. It installs `requirements.txt`, starts with `python app.py`, and prompts for the four secret provider variables during Blueprint creation. The application binds to `0.0.0.0` and Render's `PORT`; locally it defaults to port 7860.
-
-After deployment, test one research request in each language and confirm that the final report includes five working source links. Free services may suspend while inactive, so the first request after inactivity can be slower.
+Build with the included `Dockerfile` and supply provider values only through the
+untracked runtime environment. Set `PORT=7860` and `GRADIO_ROOT_PATH=/research`;
+bind the service to host loopback through Compose and expose it only through
+Caddy HTTPS. After deployment, test one research request in each language and
+confirm that the final report includes five working source links.
 
 ## Verification
 
@@ -125,10 +127,3 @@ must not include prompts, generated content, credentials or personal data.
 CAPTCHA is intentionally disabled. Enable it only after logs or provider metrics
 show automated abuse, and document the selected provider and privacy impact
 before deployment.
-## Container deployment
-
-The public portfolio deployment runs this application in Docker behind Caddy.
-Set `PORT=7860` and `GRADIO_ROOT_PATH` to the externally mounted path (for
-example, `/twin` or `/debate`). Keep the service bound to loopback through
-Docker Compose; Caddy is the only public HTTPS entry point. The runtime
-`.env` remains untracked and is loaded with Compose `env_file`.
