@@ -9,8 +9,10 @@ from research_manager import ResearchManager
 from model_provider import run_with_fallback
 from styles import CSS, JS, EXAMPLES, HEADER_HTML, SPANISH_EXAMPLES
 from runtime_safety import log_failure, public_error_message
+from observability import configure_observability
 
 load_dotenv(override=True)
+configure_observability()
 
 SUGGESTED_INDICES = random.sample(range(len(EXAMPLES)), k=3)
 NEW_REPORT_COMMAND = "/new-report"

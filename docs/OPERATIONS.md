@@ -19,6 +19,7 @@ After a completed report, ordinary chat messages are answered only from that rep
 |---|---|
 | Research agents | `GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY` |
 | Web search | `SERPER_API_KEY`, `GOOGLE_SEARCH_API_KEY`, `GOOGLE_SEARCH_ENGINE_ID` |
+| Phoenix tracing (optional) | `PHOENIX_COLLECTOR_ENDPOINT`, `PHOENIX_API_KEY` |
 | Commit proposals | `GEMINI_API_KEY`, `GEMINI_COMMIT_MODELS`, `GROQ_API_KEY`, `GROQ_BASE_URL`, `GROQ_COMMIT_MODEL`, `COMMIT_GENERATION_TIMEOUT` |
 
 The complete list and non-private examples live in `.env.example`.
@@ -27,7 +28,7 @@ The Gemini models, Groq fallback, provider endpoints, model timeout, search coun
 
 ## Model fallback
 
-Normal requests use Gemini 3.8 Flash. Recoverable provider or model-output failures try Gemini 3.7/3.6 Flash, Groq GPT-OSS 120B, and OpenRouter Nemotron 3 Ultra/Super Free. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Provider keys are configured through the environment; model names and endpoints remain versioned. OpenAI tracing is disabled. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
+Normal requests use Gemini 3.8 Flash. Recoverable provider or model-output failures try Gemini 3.7/3.6 Flash, Groq GPT-OSS 120B, and OpenRouter Nemotron 3 Ultra/Super Free. Each API request has a 90-second timeout; retries are controlled by this explicit chain rather than hidden client retries. Programming errors are not swallowed by the fallback chain. Provider keys are configured through the environment; model names and endpoints remain versioned. Set `PHOENIX_COLLECTOR_ENDPOINT` to enable OpenInference tracing of OpenAI Agents SDK runs; leave it unset to send no traces. Search tries Google Custom Search first, using its API key and Programmable Search Engine ID, then DDGS. DDGS requires no key, so research remains available when Google is not configured, has exhausted its quota, times out, or returns no usable results.
 
 ## Container deployment
 
