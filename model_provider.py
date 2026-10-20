@@ -31,11 +31,30 @@ load_dotenv(override=True)
 set_tracing_disabled(True)
 
 _groq_api_key = os.getenv("GROQ_API_KEY", "").strip()
-_gemini_api_key = os.getenv("GEMINI_API_KEY", "").strip()
+_gemini_api_keys = tuple(
+    dict.fromkeys(
+        key
+        for name in ("GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY_4")
+        if (key := os.getenv(name, "").strip())
+    )
+)
+_gemini_api_key = _gemini_api_keys[0] if _gemini_api_keys else ""
 _openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
 GROQ_CLIENT_PLACEHOLDER = "not-configured"
 GEMINI_CLIENT_PLACEHOLDER = "not-configured"
 OPENROUTER_CLIENT_PLACEHOLDER = "not-configured"
+
+
+def _modelo_gemini(model: str, base_url: str, api_key: str) -> OpenAIChatCompletionsModel:
+    return OpenAIChatCompletionsModel(
+        model=model,
+        openai_client=AsyncOpenAI(
+            api_key=api_key,
+            base_url=base_url,
+            timeout=MODEL_REQUEST_TIMEOUT_SECONDS,
+            max_retries=0,
+        ),
+    )
 
 PRIMARY_MODEL = OpenAIChatCompletionsModel(
     model=PRIMARY_MODEL_NAME,
@@ -126,14 +145,15 @@ async def run_with_fallback(
 ):
     """Try quality-ordered models and preserve programming errors."""
     attempts: list[tuple[str, OpenAIChatCompletionsModel]] = []
-    if _gemini_api_key:
-        attempts.extend(
-            (
-                (f"Gemini/{PRIMARY_MODEL_NAME}", PRIMARY_MODEL),
-                (f"Gemini/{SECONDARY_MODEL_NAME}", SECONDARY_MODEL),
-                (f"Gemini/{TERTIARY_MODEL_NAME}", TERTIARY_MODEL),
+    if _gemini_api_keys:
+        for api_key in _gemini_api_keys:
+            attempts.extend(
+                (
+                    (f"Gemini/{PRIMARY_MODEL_NAME}", _modelo_gemini(PRIMARY_MODEL_NAME, PRIMARY_MODEL_BASE_URL, api_key)),
+                    (f"Gemini/{SECONDARY_MODEL_NAME}", _modelo_gemini(SECONDARY_MODEL_NAME, SECONDARY_MODEL_BASE_URL, api_key)),
+                    (f"Gemini/{TERTIARY_MODEL_NAME}", _modelo_gemini(TERTIARY_MODEL_NAME, TERTIARY_MODEL_BASE_URL, api_key)),
+                )
             )
-        )
     else:
         print("[models] GEMINI_API_KEY is not configured; skipping Gemini models")
     if _groq_api_key:

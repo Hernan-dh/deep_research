@@ -38,6 +38,10 @@ bind the service to host loopback through Compose and expose it only through
 Caddy HTTPS. After deployment, test one research request in each language and
 confirm that the final report includes five working source links.
 
+## Automated deployment
+
+Pushes to `main` run the GitHub Actions deployment workflow. It requires the repository secrets `NETCUP_HOST`, `NETCUP_USER`, `NETCUP_SSH_KEY`, and `NETCUP_KNOWN_HOSTS`; it preserves the VPS `.env` file and rebuilds the optional `research` demo.
+
 ## Verification
 
 ```bash
